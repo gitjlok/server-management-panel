@@ -9,6 +9,8 @@ import os from "os";
 import fs from "fs/promises";
 import { exec } from "child_process";
 import { promisify } from "util";
+import { performanceCache, CACHE_CONFIG, resourceMonitor } from "./performance";
+import { securityManager } from "./security";
 
 const execAsync = promisify(exec);
 
@@ -35,6 +37,12 @@ export const appRouter = router({
   // System monitoring
   monitor: router({
     getSystemInfo: protectedProcedure.query(async () => {
+      // 尝试从缓存获取
+      const cached = performanceCache.get('system_info');
+      if (cached) return cached;
+      
+      // 记录请求
+      resourceMonitor.recordRequest();
       const cpus = os.cpus();
       const totalMem = os.totalmem();
       const freeMem = os.freemem();
@@ -72,7 +80,7 @@ export const appRouter = router({
         console.error('Failed to get network stats:', error);
       }
 
-      return {
+      const result = {
         cpu: {
           usage: cpuUsage,
           cores: cpus.length,
@@ -91,6 +99,11 @@ export const appRouter = router({
         hostname: os.hostname(),
         loadAverage: os.loadavg()
       };
+      
+      // 存入缓存
+      performanceCache.set('system_info', result, CACHE_CONFIG.SYSTEM_INFO);
+      
+      return result;
     }),
 
     getProcesses: protectedProcedure.query(async () => {
@@ -494,6 +507,95 @@ export const appRouter = router({
   users: router({
     list: adminProcedure.query(async () => {
       return await db.getAllUsers();
+    }),
+  }),
+
+  // Security management
+  security: router({
+    // 运行安全检查
+    runSecurityCheck: adminProcedure.mutation(async ({ ctx }) => {
+      const results = await securityManager.runSecurityCheck();
+      
+      await db.createOperationLog({
+        userId: ctx.user.id,
+        action: 'security_check',
+        resource: 'system',
+        resourceId: 'security',
+        status: 'success',
+        ipAddress: ctx.req.ip
+      });
+      
+      return results;
+    }),
+
+    // 获取封禁IP列表
+    getBannedIPs: adminProcedure.query(() => {
+      return securityManager.getBannedIPs();
+    }),
+
+    // 封禁IP
+    banIP: adminProcedure
+      .input(z.object({
+        ip: z.string(),
+        reason: z.string(),
+        duration: z.number().optional(), // 毫秒
+      }))
+      .mutation(async ({ input, ctx }) => {
+        securityManager.banIP(input.ip, input.reason, input.duration);
+        
+        await db.createOperationLog({
+          userId: ctx.user.id,
+          action: 'ban_ip',
+          resource: 'security',
+          resourceId: input.ip,
+          status: 'success',
+          details: input.reason,
+          ipAddress: ctx.req.ip
+        });
+        
+        return { success: true };
+      }),
+
+    // 解封IP
+    unbanIP: adminProcedure
+      .input(z.object({ ip: z.string() }))
+      .mutation(async ({ input, ctx }) => {
+        await securityManager.unbanIP(input.ip);
+        
+        await db.createOperationLog({
+          userId: ctx.user.id,
+          action: 'unban_ip',
+          resource: 'security',
+          resourceId: input.ip,
+          status: 'success',
+          ipAddress: ctx.req.ip
+        });
+        
+        return { success: true };
+      }),
+  }),
+
+  // Performance monitoring
+  performance: router({
+    // 获取性能统计
+    getStats: adminProcedure.query(() => {
+      return resourceMonitor.getStats();
+    }),
+
+    // 清空缓存
+    clearCache: adminProcedure.mutation(async ({ ctx }) => {
+      performanceCache.clearAll();
+      
+      await db.createOperationLog({
+        userId: ctx.user.id,
+        action: 'clear_cache',
+        resource: 'system',
+        resourceId: 'cache',
+        status: 'success',
+        ipAddress: ctx.req.ip
+      });
+      
+      return { success: true };
     }),
   }),
 
