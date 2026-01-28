@@ -9,12 +9,16 @@ import {
   ipWhitelist, 
   operationLogs,
   files,
+  serverConnections,
+  deploymentHistory,
   InsertWebsite,
   InsertDatabase,
   InsertFirewallRule,
   InsertIpWhitelist,
   InsertOperationLog,
-  InsertFile
+  InsertFile,
+  InsertServerConnection,
+  InsertDeploymentHistory
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -235,4 +239,71 @@ export async function deleteFile(id: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   return await db.delete(files).where(eq(files.id, id));
+}
+
+// Server connection operations
+export async function createServerConnection(connection: InsertServerConnection) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(serverConnections).values(connection);
+  return result;
+}
+
+export async function getServerConnections() {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(serverConnections).orderBy(desc(serverConnections.createdAt));
+}
+
+export async function getServerConnectionById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  
+  const result = await db.select().from(serverConnections).where(eq(serverConnections.id, id)).limit(1);
+  return result[0];
+}
+
+export async function updateServerConnection(id: number, data: Partial<InsertServerConnection>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(serverConnections).set(data).where(eq(serverConnections.id, id));
+}
+
+export async function deleteServerConnection(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.delete(serverConnections).where(eq(serverConnections.id, id));
+}
+
+// Deployment history operations
+export async function createDeploymentHistory(deployment: InsertDeploymentHistory) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(deploymentHistory).values(deployment);
+  return result;
+}
+
+export async function getDeploymentHistory(serverId?: number) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  if (serverId) {
+    return await db.select().from(deploymentHistory)
+      .where(eq(deploymentHistory.serverId, serverId))
+      .orderBy(desc(deploymentHistory.startedAt));
+  }
+  
+  return await db.select().from(deploymentHistory).orderBy(desc(deploymentHistory.startedAt));
+}
+
+export async function updateDeploymentHistory(id: number, data: Partial<InsertDeploymentHistory>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(deploymentHistory).set(data).where(eq(deploymentHistory.id, id));
 }

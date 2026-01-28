@@ -129,3 +129,45 @@ export const files = mysqlTable("files", {
 
 export type File = typeof files.$inferSelect;
 export type InsertFile = typeof files.$inferInsert;
+
+/**
+ * Server connections for deployment
+ */
+export const serverConnections = mysqlTable("serverConnections", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  host: varchar("host", { length: 255 }).notNull(),
+  port: int("port").default(22).notNull(),
+  username: varchar("username", { length: 255 }).notNull(),
+  authType: mysqlEnum("authType", ["password", "key"]).default("password").notNull(),
+  password: text("password"),
+  privateKey: text("privateKey"),
+  status: mysqlEnum("status", ["connected", "disconnected", "error"]).default("disconnected").notNull(),
+  lastConnected: timestamp("lastConnected"),
+  description: text("description"),
+  createdBy: int("createdBy").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type ServerConnection = typeof serverConnections.$inferSelect;
+export type InsertServerConnection = typeof serverConnections.$inferInsert;
+
+/**
+ * Deployment history records
+ */
+export const deploymentHistory = mysqlTable("deploymentHistory", {
+  id: int("id").autoincrement().primaryKey(),
+  serverId: int("serverId").notNull(),
+  deployType: varchar("deployType", { length: 255 }).notNull(),
+  status: mysqlEnum("status", ["pending", "running", "success", "failed"]).default("pending").notNull(),
+  command: text("command"),
+  output: text("output"),
+  errorMessage: text("errorMessage"),
+  startedAt: timestamp("startedAt").defaultNow().notNull(),
+  completedAt: timestamp("completedAt"),
+  createdBy: int("createdBy").notNull(),
+});
+
+export type DeploymentHistory = typeof deploymentHistory.$inferSelect;
+export type InsertDeploymentHistory = typeof deploymentHistory.$inferInsert;

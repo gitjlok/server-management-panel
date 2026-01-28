@@ -13,7 +13,8 @@ import Processes from "./pages/Processes";
 import Security from "./pages/Security";
 import Logs from "./pages/Logs";
 import Users from "./pages/Users";
-import { Activity, Files, Globe, Database, Cpu, Shield, FileText, Users as UsersIcon } from "lucide-react";
+import Deployment from "./pages/Deployment";
+import { Activity, Files, Globe, Database, Cpu, Shield, FileText, Users as UsersIcon, Rocket } from "lucide-react";
 
 const navigation = [
   { name: "仪表板", href: "/", icon: Activity },
@@ -21,6 +22,7 @@ const navigation = [
   { name: "网站管理", href: "/websites", icon: Globe },
   { name: "数据库", href: "/databases", icon: Database },
   { name: "进程管理", href: "/processes", icon: Cpu },
+  { name: "服务器部署", href: "/deployment", icon: Rocket },
   { name: "安全设置", href: "/security", icon: Shield },
   { name: "操作日志", href: "/logs", icon: FileText },
   { name: "用户管理", href: "/users", icon: UsersIcon },
@@ -35,6 +37,7 @@ function Router() {
         <Route path="/websites" component={Websites} />
         <Route path="/databases" component={Databases} />
         <Route path="/processes" component={Processes} />
+        <Route path="/deployment" component={Deployment} />
         <Route path="/security" component={Security} />
         <Route path="/logs" component={Logs} />
         <Route path="/users" component={Users} />

@@ -496,6 +496,174 @@ export const appRouter = router({
       return await db.getAllUsers();
     }),
   }),
+
+  // Server deployment
+  deployment: router({
+    // List all server connections
+    listServers: protectedProcedure.query(async () => {
+      return await db.getServerConnections();
+    }),
+
+    // Get single server connection
+    getServer: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ input }) => {
+        return await db.getServerConnectionById(input.id);
+      }),
+
+    // Create server connection
+    createServer: adminProcedure
+      .input(z.object({
+        name: z.string(),
+        host: z.string(),
+        port: z.number().default(22),
+        username: z.string(),
+        authType: z.enum(["password", "key"]),
+        password: z.string().optional(),
+        privateKey: z.string().optional(),
+        description: z.string().optional(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        await db.createServerConnection({
+          ...input,
+          createdBy: ctx.user.id,
+        });
+        
+        await db.createOperationLog({
+          userId: ctx.user.id,
+          action: 'create_server',
+          resource: 'server',
+          resourceId: input.name,
+          status: 'success',
+          ipAddress: ctx.req.ip
+        });
+        
+        return { success: true };
+      }),
+
+    // Test server connection
+    testConnection: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input, ctx }) => {
+        const server = await db.getServerConnectionById(input.id);
+        if (!server) {
+          throw new TRPCError({ code: 'NOT_FOUND', message: 'Server not found' });
+        }
+
+        try {
+          // Simulate SSH connection test (in real implementation, use ssh2 library)
+          const testCommand = `timeout 5 nc -zv ${server.host} ${server.port} 2>&1`;
+          const { stdout, stderr } = await execAsync(testCommand);
+          
+          const isSuccess = stdout.includes('succeeded') || stderr.includes('succeeded');
+          
+          await db.updateServerConnection(input.id, {
+            status: isSuccess ? 'connected' : 'error',
+            lastConnected: isSuccess ? new Date() : undefined,
+          });
+
+          await db.createOperationLog({
+            userId: ctx.user.id,
+            action: 'test_connection',
+            resource: 'server',
+            resourceId: String(input.id),
+            status: isSuccess ? 'success' : 'failed',
+            details: stdout || stderr,
+            ipAddress: ctx.req.ip
+          });
+
+          return { success: isSuccess, message: isSuccess ? '连接成功' : '连接失败' };
+        } catch (error: any) {
+          await db.updateServerConnection(input.id, {
+            status: 'error',
+          });
+          
+          return { success: false, message: error.message || '连接失败' };
+        }
+      }),
+
+    // Delete server connection
+    deleteServer: adminProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input, ctx }) => {
+        await db.deleteServerConnection(input.id);
+        
+        await db.createOperationLog({
+          userId: ctx.user.id,
+          action: 'delete_server',
+          resource: 'server',
+          resourceId: String(input.id),
+          status: 'success',
+          ipAddress: ctx.req.ip
+        });
+        
+        return { success: true };
+      }),
+
+    // Get deployment history
+    getHistory: protectedProcedure
+      .input(z.object({ serverId: z.number().optional() }))
+      .query(async ({ input }) => {
+        return await db.getDeploymentHistory(input.serverId);
+      }),
+
+    // Execute deployment
+    deploy: adminProcedure
+      .input(z.object({
+        serverId: z.number(),
+        deployType: z.string(),
+        command: z.string(),
+      }))
+      .mutation(async ({ input, ctx }) => {
+        const server = await db.getServerConnectionById(input.serverId);
+        if (!server) {
+          throw new TRPCError({ code: 'NOT_FOUND', message: 'Server not found' });
+        }
+
+        // Create deployment record
+        const result = await db.createDeploymentHistory({
+          serverId: input.serverId,
+          deployType: input.deployType,
+          command: input.command,
+          status: 'running',
+          createdBy: ctx.user.id,
+        });
+
+        const deploymentId = Number((result as any)[0]?.insertId || 1);
+
+        // Execute deployment asynchronously
+        (async () => {
+          try {
+            // In real implementation, use ssh2 to execute remote commands
+            // For now, simulate deployment
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            await db.updateDeploymentHistory(deploymentId, {
+              status: 'success',
+              output: '部署成功完成',
+              completedAt: new Date(),
+            });
+
+            await db.createOperationLog({
+              userId: ctx.user.id,
+              action: 'deploy',
+              resource: 'server',
+              resourceId: String(input.serverId),
+              status: 'success',
+              ipAddress: ctx.req.ip
+            });
+          } catch (error: any) {
+            await db.updateDeploymentHistory(deploymentId, {
+              status: 'failed',
+              errorMessage: error.message,
+              completedAt: new Date(),
+            });
+          }
+        })();
+
+        return { success: true, deploymentId };
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

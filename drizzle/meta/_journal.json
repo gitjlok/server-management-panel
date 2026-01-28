@@ -15,6 +15,13 @@
       "when": 1769582822374,
       "tag": "0001_boring_red_ghost",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1769583893571,
+      "tag": "0002_adorable_pixie",
+      "breakpoints": true
     }
   ]
 }
