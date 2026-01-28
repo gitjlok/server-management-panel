@@ -228,18 +228,103 @@ EOF
 
 # 配置防火墙
 setup_firewall() {
-    print_info "正在配置防火墙..."
+    echo ""
+    echo "${YELLOW}===========================================${NC}"
+    echo "${YELLOW}防火墙配置${NC}"
+    echo "${YELLOW}===========================================${NC}"
+    echo ""
+    echo "面板需要开放以下端口才能正常访问："
+    echo "  - 8888/tcp  (面板管理端口)"
+    echo "  - 3306/tcp  (MySQL数据库端口, 可选)"
+    echo ""
     
-    if command -v ufw &> /dev/null; then
-        ufw allow 8888/tcp
-        print_success "UFW防火墙规则已添加"
-    elif command -v firewall-cmd &> /dev/null; then
-        firewall-cmd --permanent --add-port=8888/tcp
-        firewall-cmd --reload
-        print_success "Firewalld防火墙规则已添加"
-    else
-        print_warning "未检测到防火墙，请手动开放8888端口"
+    # 检测防火墙类型
+    FIREWALL_TYPE="none"
+    if command -v ufw &> /dev/null && ufw status | grep -q "Status: active"; then
+        FIREWALL_TYPE="ufw"
+    elif command -v firewall-cmd &> /dev/null && systemctl is-active --quiet firewalld; then
+        FIREWALL_TYPE="firewalld"
+    elif command -v iptables &> /dev/null; then
+        FIREWALL_TYPE="iptables"
     fi
+    
+    if [ "$FIREWALL_TYPE" = "none" ]; then
+        print_warning "未检测到活跃的防火墙，跳过配置"
+        echo "如果您的服务器有云安全组，请手动在云控制台开放 8888 端口"
+        return
+    fi
+    
+    echo "检测到防火墙类型: ${GREEN}${FIREWALL_TYPE}${NC}"
+    echo ""
+    read -p "是否自动配置防火墙开放 8888 端口? [Y/n]: " OPEN_PORT
+    OPEN_PORT=${OPEN_PORT:-Y}
+    
+    if [[ "$OPEN_PORT" =~ ^[Yy]$ ]]; then
+        print_info "正在配置防火墙..."
+        
+        case $FIREWALL_TYPE in
+            ufw)
+                ufw allow 8888/tcp
+                ufw status | grep 8888
+                print_success "UFW防火墙规则已添加"
+                ;;
+            firewalld)
+                firewall-cmd --permanent --add-port=8888/tcp
+                firewall-cmd --reload
+                firewall-cmd --list-ports | grep 8888
+                print_success "Firewalld防火墙规则已添加"
+                ;;
+            iptables)
+                iptables -I INPUT -p tcp --dport 8888 -j ACCEPT
+                # 尝试保存iptables规则
+                if command -v iptables-save &> /dev/null; then
+                    iptables-save > /etc/iptables/rules.v4 2>/dev/null || true
+                fi
+                print_success "Iptables防火墙规则已添加"
+                ;;
+        esac
+        
+        echo ""
+        read -p "是否也开放 MySQL 端口 3306 (用于远程数据库管理)? [y/N]: " OPEN_MYSQL
+        OPEN_MYSQL=${OPEN_MYSQL:-N}
+        
+        if [[ "$OPEN_MYSQL" =~ ^[Yy]$ ]]; then
+            case $FIREWALL_TYPE in
+                ufw)
+                    ufw allow 3306/tcp
+                    ;;
+                firewalld)
+                    firewall-cmd --permanent --add-port=3306/tcp
+                    firewall-cmd --reload
+                    ;;
+                iptables)
+                    iptables -I INPUT -p tcp --dport 3306 -j ACCEPT
+                    if command -v iptables-save &> /dev/null; then
+                        iptables-save > /etc/iptables/rules.v4 2>/dev/null || true
+                    fi
+                    ;;
+            esac
+            print_success "MySQL端口 3306 已开放"
+        fi
+    else
+        print_warning "已跳过防火墙配置，请手动开放 8888 端口"
+        echo "手动开放命令示例："
+        case $FIREWALL_TYPE in
+            ufw)
+                echo "  sudo ufw allow 8888/tcp"
+                ;;
+            firewalld)
+                echo "  sudo firewall-cmd --permanent --add-port=8888/tcp"
+                echo "  sudo firewall-cmd --reload"
+                ;;
+            iptables)
+                echo "  sudo iptables -I INPUT -p tcp --dport 8888 -j ACCEPT"
+                ;;
+        esac
+    fi
+    
+    echo ""
+    print_warning "注意：如果使用云服务器，请确保在云安全组中也开放了 8888 端口！"
 }
 
 # 启动面板
