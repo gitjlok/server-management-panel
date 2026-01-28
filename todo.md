@@ -72,3 +72,9 @@
 - [x] 修复install.sh中缺少的GitHub克隆步骤
 - [x] 测试安装脚本的完整流程
 - [x] 推送修复到GitHub
+
+## 安装脚本端口配置
+- [x] 添加端口开放的交互式询问
+- [x] 自动配置防火墙规则（iptables/firewalld/ufw）
+- [x] 显示端口开放状态和访问提示
+- [x] 推送更新到GitHub
