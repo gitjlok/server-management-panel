@@ -1,6 +1,6 @@
 #!/bin/bash
 # 服务器管理面板一键安装脚本
-# 使用方法: if [ -f /usr/bin/curl ];then curl -sSO https://raw.githubusercontent.com/your-repo/server-panel/main/install.sh;else wget -O install.sh https://raw.githubusercontent.com/your-repo/server-panel/main/install.sh;fi;bash install.sh
+# 使用方法: if [ -f /usr/bin/curl ];then curl -sSO https://raw.githubusercontent.com/gitjlok/server-management-panel/main/install.sh;else wget -O install.sh https://raw.githubusercontent.com/gitjlok/server-management-panel/main/install.sh;fi;bash install.sh
 
 set -e
 

@@ -32,17 +32,17 @@
 在您的服务器上执行以下命令：
 
 ```bash
-if [ -f /usr/bin/curl ];then curl -sSO https://raw.githubusercontent.com/your-repo/server-panel/main/install.sh;else wget -O install.sh https://raw.githubusercontent.com/your-repo/server-panel/main/install.sh;fi;bash install.sh
+if [ -f /usr/bin/curl ];then curl -sSO https://raw.githubusercontent.com/gitjlok/server-management-panel/main/install.sh;else wget -O install.sh https://raw.githubusercontent.com/gitjlok/server-management-panel/main/install.sh;fi;bash install.sh
 ```
 
 或者分步执行：
 
 ```bash
 # 使用curl下载
-curl -sSO https://raw.githubusercontent.com/your-repo/server-panel/main/install.sh
+curl -sSO https://raw.githubusercontent.com/gitjlok/server-management-panel/main/install.sh
 
 # 或者使用wget下载
-wget https://raw.githubusercontent.com/your-repo/server-panel/main/install.sh
+wget https://raw.githubusercontent.com/gitjlok/server-management-panel/main/install.sh
 
 # 执行安装
 bash install.sh
@@ -123,7 +123,7 @@ journalctl -u server-panel -f
 
 ```bash
 # 克隆仓库
-git clone https://github.com/your-repo/server-panel.git
+git clone https://github.com/gitjlok/server-management-panel.git
 cd server-panel
 
 # 安装依赖
@@ -201,7 +201,7 @@ MIT License
 ## 📧 技术支持
 
 - 官方文档: https://docs.your-domain.com
-- GitHub Issues: https://github.com/your-repo/server-panel/issues
+- GitHub Issues: https://github.com/gitjlok/server-management-panel/issues
 - 技术支持: support@your-domain.com
 
 ---
