@@ -7,13 +7,20 @@
 在您的服务器上执行以下命令即可完成安装：
 
 ```bash
-curl -sSL https://your-domain.com/install.sh | bash
+if [ -f /usr/bin/curl ];then curl -sSO https://raw.githubusercontent.com/your-repo/server-panel/main/install.sh;else wget -O install.sh https://raw.githubusercontent.com/your-repo/server-panel/main/install.sh;fi;bash install.sh
 ```
 
-或者使用wget：
+或者分步执行：
 
 ```bash
-wget -O - https://your-domain.com/install.sh | bash
+# 使用curl下载
+curl -sSO https://raw.githubusercontent.com/your-repo/server-panel/main/install.sh
+
+# 或者使用wget下载
+wget https://raw.githubusercontent.com/your-repo/server-panel/main/install.sh
+
+# 执行安装
+bash install.sh
 ```
 
 ### 系统要求
