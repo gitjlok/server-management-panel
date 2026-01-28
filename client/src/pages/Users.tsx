@@ -8,9 +8,9 @@ export default function Users() {
   const { data: users, isLoading } = trpc.users.list.useQuery();
 
   return (
-    <div className="space-y-6 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn p-6">
       <div>
-        <h1 className="text-3xl font-bold">用户管理</h1>
+        <h1 className="text-2xl font-semibold">用户管理</h1>
         <p className="text-muted-foreground mt-1">管理系统用户和权限</p>
       </div>
 

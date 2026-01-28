@@ -86,10 +86,10 @@ export default function FileManager() {
   const pathParts = currentPath.split("/").filter(Boolean);
 
   return (
-    <div className="space-y-6 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn p-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">文件管理器</h1>
+          <h1 className="text-2xl font-semibold">文件管理器</h1>
           <p className="text-muted-foreground mt-1">浏览和管理服务器文件</p>
         </div>
         <div className="flex gap-2">

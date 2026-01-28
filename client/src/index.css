@@ -43,18 +43,18 @@
 }
 
 :root {
-  --primary: oklch(0.45 0.18 250);
+  --primary: oklch(0.58 0.15 145); /* 宝塔绿色 #20a53a */
   --primary-foreground: oklch(0.98 0.01 240);
-  --sidebar-primary: oklch(0.45 0.18 250);
+  --sidebar-primary: oklch(0.58 0.15 145);
   --sidebar-primary-foreground: oklch(0.98 0.01 240);
-  --chart-1: oklch(0.60 0.15 250);
-  --chart-2: oklch(0.55 0.15 230);
-  --chart-3: oklch(0.60 0.15 280);
-  --chart-4: oklch(0.55 0.15 145);
-  --chart-5: oklch(0.65 0.18 65);
+  --chart-1: oklch(0.65 0.18 65); /* 橙色 - CPU */
+  --chart-2: oklch(0.60 0.15 250); /* 蓝色 - 内存/网络 */
+  --chart-3: oklch(0.58 0.15 145); /* 绿色 - 磁盘 */
+  --chart-4: oklch(0.60 0.15 280); /* 紫色 */
+  --chart-5: oklch(0.55 0.15 230); /* 青色 */
   --radius: 0.5rem;
-  --background: oklch(0.98 0.01 240);
-  --foreground: oklch(0.20 0.02 240);
+  --background: oklch(0.97 0.005 240); /* #f5f7f9 浅灰背景 */
+  --foreground: oklch(0.25 0.01 240); /* #333333 深灰文字 */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.20 0.02 240);
   --popover: oklch(1 0 0);
@@ -70,12 +70,12 @@
   --border: oklch(0.88 0.01 240);
   --input: oklch(0.88 0.01 240);
   --ring: oklch(0.45 0.18 250);
-  --sidebar: oklch(1 0 0);
-  --sidebar-foreground: oklch(0.20 0.02 240);
-  --sidebar-accent: oklch(0.94 0.01 240);
-  --sidebar-accent-foreground: oklch(0.20 0.02 240);
-  --sidebar-border: oklch(0.88 0.01 240);
-  --sidebar-ring: oklch(0.45 0.18 250);
+  --sidebar: oklch(0.30 0.02 240); /* #2c3e50 深蓝灰侧边栏 */
+  --sidebar-foreground: oklch(0.85 0.01 240); /* 浅灰文字 */
+  --sidebar-accent: oklch(0.35 0.02 240); /* #34495e 悬停背景 */
+  --sidebar-accent-foreground: oklch(0.95 0.01 240); /* 白色文字 */
+  --sidebar-border: oklch(0.25 0.02 240);
+  --sidebar-ring: oklch(0.58 0.15 145);
 }
 
 .dark {
@@ -210,3 +210,40 @@
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
   }
 }
+  /* 宝塔面板风格样式 */
+  .baota-progress-ring {
+    transform: rotate(-90deg);
+  }
+  
+  .baota-progress-ring circle {
+    transition: stroke-dashoffset 0.35s;
+    transform-origin: 50% 50%;
+  }
+  
+  .baota-stat-card {
+    @apply bg-white rounded-lg p-6 shadow-sm border border-border hover:shadow-md transition-shadow;
+  }
+  
+  .baota-stat-value {
+    @apply text-3xl font-bold text-primary;
+  }
+  
+  .baota-stat-label {
+    @apply text-sm text-muted-foreground mt-1;
+  }
+  
+  .baota-btn-group button {
+    @apply first:rounded-l last:rounded-r rounded-none;
+  }
+  
+  .baota-toggle {
+    @apply relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  
+  .baota-toggle[data-state="checked"] {
+    @apply bg-primary;
+  }
+  
+  .baota-toggle[data-state="unchecked"] {
+    @apply bg-input;
+  }

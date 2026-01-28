@@ -44,10 +44,10 @@ export default function Processes() {
   }
 
   return (
-    <div className="space-y-6 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn p-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">进程管理</h1>
+          <h1 className="text-2xl font-semibold">进程管理</h1>
           <p className="text-muted-foreground mt-1">监控和控制运行中的进程</p>
         </div>
         <Button onClick={() => refetch()} variant="outline" size="sm">

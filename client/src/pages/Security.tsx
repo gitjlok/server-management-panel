@@ -102,9 +102,9 @@ export default function Security() {
   };
 
   return (
-    <div className="space-y-6 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn p-6">
       <div>
-        <h1 className="text-3xl font-bold">安全设置</h1>
+        <h1 className="text-2xl font-semibold">安全设置</h1>
         <p className="text-muted-foreground mt-1">管理防火墙规则和IP访问控制</p>
       </div>
 

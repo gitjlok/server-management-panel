@@ -11,10 +11,10 @@ export default function Logs() {
   });
 
   return (
-    <div className="space-y-6 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn p-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">操作日志</h1>
+          <h1 className="text-2xl font-semibold">操作日志</h1>
           <p className="text-muted-foreground mt-1">查看系统活动和审计跟踪</p>
         </div>
         <Button onClick={() => refetch()} variant="outline" size="sm">

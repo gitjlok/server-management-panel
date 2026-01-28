@@ -48,10 +48,10 @@ export default function Databases() {
   };
 
   return (
-    <div className="space-y-6 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn p-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">数据库管理</h1>
+          <h1 className="text-2xl font-semibold">数据库管理</h1>
           <p className="text-muted-foreground mt-1">管理 MySQL 数据库</p>
         </div>
         <Button onClick={() => setShowCreateDialog(true)}>

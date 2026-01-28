@@ -154,10 +154,10 @@ export default function Deployment() {
   };
 
   return (
-    <div className="space-y-6 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn p-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">服务器部署</h1>
+          <h1 className="text-2xl font-semibold">服务器部署</h1>
           <p className="text-muted-foreground mt-1">管理服务器连接和部署任务</p>
         </div>
         <Button onClick={() => setShowCreateDialog(true)}>

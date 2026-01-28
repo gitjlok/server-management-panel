@@ -94,15 +94,15 @@ export default function Websites() {
   };
 
   return (
-    <div className="space-y-6 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn p-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">网站管理</h1>
+          <h1 className="text-2xl font-semibold">网站管理</h1>
           <p className="text-muted-foreground mt-1">管理托管的网站和域名</p>
         </div>
-        <Button onClick={() => setShowCreateDialog(true)}>
+        <Button onClick={() => setShowCreateDialog(true)} className="bg-primary hover:bg-primary/90">
           <Plus className="w-4 h-4 mr-2" />
-          添加网站
+          创建网站
         </Button>
       </div>
 
