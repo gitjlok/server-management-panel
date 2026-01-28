@@ -1,17 +1,10 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, boolean, bigint } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
- * Extend this file with additional tables as your product grows.
- * Columns use camelCase to match both database fields and generated types.
  */
 export const users = mysqlTable("users", {
-  /**
-   * Surrogate primary key. Auto-incremented numeric value managed by the database.
-   * Use this for relations between tables.
-   */
   id: int("id").autoincrement().primaryKey(),
-  /** Manus OAuth identifier (openId) returned from the OAuth callback. Unique per user. */
   openId: varchar("openId", { length: 64 }).notNull().unique(),
   name: text("name"),
   email: varchar("email", { length: 320 }),
@@ -25,4 +18,114 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+/**
+ * Websites managed by the panel
+ */
+export const websites = mysqlTable("websites", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  domain: varchar("domain", { length: 255 }).notNull(),
+  path: text("path").notNull(),
+  port: int("port"),
+  sslEnabled: boolean("sslEnabled").default(false).notNull(),
+  sslCertPath: text("sslCertPath"),
+  sslKeyPath: text("sslKeyPath"),
+  status: mysqlEnum("status", ["running", "stopped", "error"]).default("stopped").notNull(),
+  createdBy: int("createdBy").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Website = typeof websites.$inferSelect;
+export type InsertWebsite = typeof websites.$inferInsert;
+
+/**
+ * Databases managed by the panel
+ */
+export const databases = mysqlTable("databases", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull().unique(),
+  username: varchar("username", { length: 255 }).notNull(),
+  password: text("password").notNull(),
+  host: varchar("host", { length: 255 }).default("localhost").notNull(),
+  port: int("port").default(3306).notNull(),
+  createdBy: int("createdBy").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Database = typeof databases.$inferSelect;
+export type InsertDatabase = typeof databases.$inferInsert;
+
+/**
+ * Firewall rules for security management
+ */
+export const firewallRules = mysqlTable("firewallRules", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  port: int("port").notNull(),
+  protocol: mysqlEnum("protocol", ["tcp", "udp", "both"]).default("tcp").notNull(),
+  action: mysqlEnum("action", ["allow", "deny"]).default("allow").notNull(),
+  sourceIp: varchar("sourceIp", { length: 255 }),
+  enabled: boolean("enabled").default(true).notNull(),
+  createdBy: int("createdBy").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type FirewallRule = typeof firewallRules.$inferSelect;
+export type InsertFirewallRule = typeof firewallRules.$inferInsert;
+
+/**
+ * IP access control list
+ */
+export const ipWhitelist = mysqlTable("ipWhitelist", {
+  id: int("id").autoincrement().primaryKey(),
+  ipAddress: varchar("ipAddress", { length: 255 }).notNull().unique(),
+  description: text("description"),
+  enabled: boolean("enabled").default(true).notNull(),
+  createdBy: int("createdBy").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type IpWhitelist = typeof ipWhitelist.$inferSelect;
+export type InsertIpWhitelist = typeof ipWhitelist.$inferInsert;
+
+/**
+ * Operation logs for audit trail
+ */
+export const operationLogs = mysqlTable("operationLogs", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(),
+  action: varchar("action", { length: 255 }).notNull(),
+  resource: varchar("resource", { length: 255 }).notNull(),
+  resourceId: varchar("resourceId", { length: 255 }),
+  details: text("details"),
+  ipAddress: varchar("ipAddress", { length: 255 }),
+  status: mysqlEnum("status", ["success", "failed"]).default("success").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type OperationLog = typeof operationLogs.$inferSelect;
+export type InsertOperationLog = typeof operationLogs.$inferInsert;
+
+/**
+ * File metadata for file management
+ */
+export const files = mysqlTable("files", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  path: text("path").notNull(),
+  size: bigint("size", { mode: "number" }).notNull(),
+  mimeType: varchar("mimeType", { length: 255 }),
+  permissions: varchar("permissions", { length: 10 }),
+  owner: varchar("owner", { length: 255 }),
+  isDirectory: boolean("isDirectory").default(false).notNull(),
+  parentPath: text("parentPath"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type File = typeof files.$inferSelect;
+export type InsertFile = typeof files.$inferInsert;

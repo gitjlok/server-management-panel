@@ -1,11 +1,25 @@
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { 
+  InsertUser, 
+  users, 
+  websites, 
+  databases, 
+  firewallRules, 
+  ipWhitelist, 
+  operationLogs,
+  files,
+  InsertWebsite,
+  InsertDatabase,
+  InsertFirewallRule,
+  InsertIpWhitelist,
+  InsertOperationLog,
+  InsertFile
+} from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
-// Lazily create the drizzle instance so local tooling can run without a DB.
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
@@ -18,6 +32,7 @@ export async function getDb() {
   return _db;
 }
 
+// User operations
 export async function upsertUser(user: InsertUser): Promise<void> {
   if (!user.openId) {
     throw new Error("User openId is required for upsert");
@@ -85,8 +100,139 @@ export async function getUserByOpenId(openId: string) {
   }
 
   const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
-
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+export async function getAllUsers() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(users).orderBy(desc(users.createdAt));
+}
+
+// Website operations
+export async function createWebsite(website: InsertWebsite) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  const result = await db.insert(websites).values(website);
+  return result;
+}
+
+export async function getWebsites() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(websites).orderBy(desc(websites.createdAt));
+}
+
+export async function getWebsiteById(id: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const result = await db.select().from(websites).where(eq(websites.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function updateWebsite(id: number, data: Partial<InsertWebsite>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return await db.update(websites).set(data).where(eq(websites.id, id));
+}
+
+export async function deleteWebsite(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return await db.delete(websites).where(eq(websites.id, id));
+}
+
+// Database operations
+export async function createDatabase(database: InsertDatabase) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return await db.insert(databases).values(database);
+}
+
+export async function getDatabases() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(databases).orderBy(desc(databases.createdAt));
+}
+
+export async function deleteDatabase(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return await db.delete(databases).where(eq(databases.id, id));
+}
+
+// Firewall rules operations
+export async function createFirewallRule(rule: InsertFirewallRule) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return await db.insert(firewallRules).values(rule);
+}
+
+export async function getFirewallRules() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(firewallRules).orderBy(desc(firewallRules.createdAt));
+}
+
+export async function updateFirewallRule(id: number, data: Partial<InsertFirewallRule>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return await db.update(firewallRules).set(data).where(eq(firewallRules.id, id));
+}
+
+export async function deleteFirewallRule(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return await db.delete(firewallRules).where(eq(firewallRules.id, id));
+}
+
+// IP Whitelist operations
+export async function createIpWhitelist(ip: InsertIpWhitelist) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return await db.insert(ipWhitelist).values(ip);
+}
+
+export async function getIpWhitelist() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(ipWhitelist).orderBy(desc(ipWhitelist.createdAt));
+}
+
+export async function deleteIpWhitelist(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return await db.delete(ipWhitelist).where(eq(ipWhitelist.id, id));
+}
+
+// Operation logs
+export async function createOperationLog(log: InsertOperationLog) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return await db.insert(operationLogs).values(log);
+}
+
+export async function getOperationLogs(limit: number = 100) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(operationLogs).orderBy(desc(operationLogs.createdAt)).limit(limit);
+}
+
+// File operations
+export async function createFile(file: InsertFile) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return await db.insert(files).values(file);
+}
+
+export async function getFilesByPath(path: string) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(files).where(eq(files.parentPath, path));
+}
+
+export async function deleteFile(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  return await db.delete(files).where(eq(files.id, id));
+}
