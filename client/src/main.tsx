@@ -37,10 +37,21 @@ queryClient.getMutationCache().subscribe(event => {
   }
 });
 
+// 获取tRPC API的URL，支持开发和生产环境
+const getTrpcUrl = () => {
+  // 在浏览器环境中
+  if (typeof window !== 'undefined') {
+    // 使用当前页面的origin + /api/trpc
+    return `${window.location.origin}/api/trpc`;
+  }
+  // 服务端渲染时使用相对路径
+  return '/api/trpc';
+};
+
 const trpcClient = trpc.createClient({
   links: [
     httpBatchLink({
-      url: "/api/trpc",
+      url: getTrpcUrl(),
       transformer: superjson,
       fetch(input, init) {
         return globalThis.fetch(input, {
