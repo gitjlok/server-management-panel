@@ -104,21 +104,21 @@ export default function Security() {
   return (
     <div className="space-y-6 animate-fadeIn">
       <div>
-        <h1 className="text-3xl font-bold">Security Settings</h1>
-        <p className="text-muted-foreground mt-1">Manage firewall rules and IP access control</p>
+        <h1 className="text-3xl font-bold">安全设置</h1>
+        <p className="text-muted-foreground mt-1">管理防火墙规则和IP访问控制</p>
       </div>
 
       <Tabs defaultValue="firewall" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="firewall">Firewall Rules</TabsTrigger>
-          <TabsTrigger value="whitelist">IP Whitelist</TabsTrigger>
+          <TabsTrigger value="firewall">防火墙规则</TabsTrigger>
+          <TabsTrigger value="whitelist">IP白名单</TabsTrigger>
         </TabsList>
 
         <TabsContent value="firewall" className="space-y-4">
           <div className="flex justify-end">
             <Button onClick={() => setShowFirewallDialog(true)}>
               <Plus className="w-4 h-4 mr-2" />
-              Add Rule
+              添加规则
             </Button>
           </div>
 
@@ -126,22 +126,22 @@ export default function Security() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Shield className="w-5 h-5" />
-                Firewall Rules
+                防火墙规则
               </CardTitle>
-              <CardDescription>Configure port access rules</CardDescription>
+              <CardDescription>配置端口访问规则</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="rounded-md border">
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Port</TableHead>
-                      <TableHead>Protocol</TableHead>
-                      <TableHead>Action</TableHead>
-                      <TableHead>Source IP</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                      <TableHead>名称</TableHead>
+                      <TableHead>端口</TableHead>
+                      <TableHead>协议</TableHead>
+                      <TableHead>动作</TableHead>
+                      <TableHead>源IP</TableHead>
+                      <TableHead>状态</TableHead>
+                      <TableHead className="text-right">操作</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -156,7 +156,7 @@ export default function Security() {
                               {rule.action.toUpperCase()}
                             </Badge>
                           </TableCell>
-                          <TableCell>{rule.sourceIp || "Any"}</TableCell>
+                          <TableCell>{rule.sourceIp || "任意"}</TableCell>
                           <TableCell>
                             <Switch checked={rule.enabled} onCheckedChange={() => handleToggleFirewall(rule.id, rule.enabled)} />
                           </TableCell>
@@ -170,7 +170,7 @@ export default function Security() {
                     ) : (
                       <TableRow>
                         <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                          No firewall rules configured
+                          未配置防火墙规则
                         </TableCell>
                       </TableRow>
                     )}
@@ -185,7 +185,7 @@ export default function Security() {
           <div className="flex justify-end">
             <Button onClick={() => setShowIPDialog(true)}>
               <Plus className="w-4 h-4 mr-2" />
-              Add IP
+              添加IP
             </Button>
           </div>
 
@@ -193,19 +193,19 @@ export default function Security() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Lock className="w-5 h-5" />
-                IP Whitelist
+                IP白名单
               </CardTitle>
-              <CardDescription>Manage allowed IP addresses</CardDescription>
+              <CardDescription>管理允许的IP地址</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="rounded-md border">
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>IP Address</TableHead>
-                      <TableHead>Description</TableHead>
-                      <TableHead>Added</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                      <TableHead>IP地址</TableHead>
+                      <TableHead>描述</TableHead>
+                      <TableHead>添加时间</TableHead>
+                      <TableHead className="text-right">操作</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -227,7 +227,7 @@ export default function Security() {
                     ) : (
                       <TableRow>
                         <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
-                          No IP addresses in whitelist
+                          白名单中没有IP地址
                         </TableCell>
                       </TableRow>
                     )}
@@ -242,20 +242,20 @@ export default function Security() {
       <Dialog open={showFirewallDialog} onOpenChange={setShowFirewallDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add Firewall Rule</DialogTitle>
-            <DialogDescription>Configure a new port access rule</DialogDescription>
+            <DialogTitle>添加防火墙规则</DialogTitle>
+            <DialogDescription>配置新的端口访问规则</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>Rule Name</Label>
+              <Label>规则名称</Label>
               <Input value={firewallForm.name} onChange={(e) => setFirewallForm({ ...firewallForm, name: e.target.value })} placeholder="SSH Access" />
             </div>
             <div className="space-y-2">
-              <Label>Port</Label>
+              <Label>端口</Label>
               <Input type="number" value={firewallForm.port} onChange={(e) => setFirewallForm({ ...firewallForm, port: e.target.value })} placeholder="22" />
             </div>
             <div className="space-y-2">
-              <Label>Protocol</Label>
+              <Label>协议</Label>
               <Select value={firewallForm.protocol} onValueChange={(value) => setFirewallForm({ ...firewallForm, protocol: value })}>
                 <SelectTrigger>
                   <SelectValue />
@@ -268,25 +268,25 @@ export default function Security() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Action</Label>
+              <Label>动作</Label>
               <Select value={firewallForm.action} onValueChange={(value) => setFirewallForm({ ...firewallForm, action: value })}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="allow">Allow</SelectItem>
-                  <SelectItem value="deny">Deny</SelectItem>
+                  <SelectItem value="allow">允许</SelectItem>
+                  <SelectItem value="deny">拒绝</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Source IP (optional)</Label>
+              <Label>源IP (可选)</Label>
               <Input value={firewallForm.sourceIp} onChange={(e) => setFirewallForm({ ...firewallForm, sourceIp: e.target.value })} placeholder="0.0.0.0/0" />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowFirewallDialog(false)}>Cancel</Button>
-            <Button onClick={handleCreateFirewall}>Create Rule</Button>
+            <Button variant="outline" onClick={() => setShowFirewallDialog(false)}>取消</Button>
+            <Button onClick={handleCreateFirewall}>创建规则</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -294,22 +294,22 @@ export default function Security() {
       <Dialog open={showIPDialog} onOpenChange={setShowIPDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add IP to Whitelist</DialogTitle>
-            <DialogDescription>Allow access from a specific IP address</DialogDescription>
+            <DialogTitle>添加IP到白名单</DialogTitle>
+            <DialogDescription>允许来自特定IP地址的访问</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>IP Address</Label>
+              <Label>IP地址</Label>
               <Input value={ipForm.ipAddress} onChange={(e) => setIpForm({ ...ipForm, ipAddress: e.target.value })} placeholder="192.168.1.1" />
             </div>
             <div className="space-y-2">
-              <Label>Description (optional)</Label>
+              <Label>描述 (可选)</Label>
               <Input value={ipForm.description} onChange={(e) => setIpForm({ ...ipForm, description: e.target.value })} placeholder="Office network" />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowIPDialog(false)}>Cancel</Button>
-            <Button onClick={handleCreateIP}>Add IP</Button>
+            <Button variant="outline" onClick={() => setShowIPDialog(false)}>取消</Button>
+            <Button onClick={handleCreateIP}>添加IP</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

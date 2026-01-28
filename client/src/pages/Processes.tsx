@@ -47,19 +47,19 @@ export default function Processes() {
     <div className="space-y-6 animate-fadeIn">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Process Management</h1>
-          <p className="text-muted-foreground mt-1">Monitor and control running processes</p>
+          <h1 className="text-3xl font-bold">进程管理</h1>
+          <p className="text-muted-foreground mt-1">监控和控制运行中的进程</p>
         </div>
         <Button onClick={() => refetch()} variant="outline" size="sm">
           <RefreshCw className="w-4 h-4 mr-2" />
-          Refresh
+          刷新
         </Button>
       </div>
 
       <Card className="shadow-elegant">
         <CardHeader>
-          <CardTitle>Running Processes</CardTitle>
-          <CardDescription>Top 20 processes sorted by memory usage</CardDescription>
+          <CardTitle>运行中的进程</CardTitle>
+          <CardDescription>按内存使用率排序的前 20 个进程</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="rounded-md border custom-scrollbar overflow-auto max-h-[600px]">
@@ -67,11 +67,11 @@ export default function Processes() {
               <TableHeader>
                 <TableRow>
                   <TableHead>PID</TableHead>
-                  <TableHead>User</TableHead>
+                  <TableHead>用户</TableHead>
                   <TableHead>CPU %</TableHead>
-                  <TableHead>Memory %</TableHead>
-                  <TableHead>Command</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>内存 %</TableHead>
+                  <TableHead>命令</TableHead>
+                  <TableHead className="text-right">操作</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -116,7 +116,7 @@ export default function Processes() {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                      No processes found
+                      未找到进程
                     </TableCell>
                   </TableRow>
                 )}
@@ -129,19 +129,18 @@ export default function Processes() {
       <AlertDialog open={!!pidToKill} onOpenChange={(open) => !open && setPidToKill(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Terminate Process</AlertDialogTitle>
+            <AlertDialogTitle>终止进程</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to terminate process {pidToKill}? This action cannot be undone
-              and may cause system instability if critical processes are terminated.
+              您确定要终止进程 {pidToKill} 吗？此操作无法撤销，如果终止关键进程可能会导致系统不稳定。
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>取消</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => pidToKill && handleKillProcess(pidToKill)}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Terminate
+              终止
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

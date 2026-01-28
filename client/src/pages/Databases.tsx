@@ -51,31 +51,31 @@ export default function Databases() {
     <div className="space-y-6 animate-fadeIn">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Database Management</h1>
-          <p className="text-muted-foreground mt-1">Manage MySQL databases</p>
+          <h1 className="text-3xl font-bold">数据库管理</h1>
+          <p className="text-muted-foreground mt-1">管理 MySQL 数据库</p>
         </div>
         <Button onClick={() => setShowCreateDialog(true)}>
           <Plus className="w-4 h-4 mr-2" />
-          Create Database
+          创建数据库
         </Button>
       </div>
 
       <Card className="shadow-elegant">
         <CardHeader>
-          <CardTitle>Databases</CardTitle>
-          <CardDescription>All MySQL databases on this server</CardDescription>
+          <CardTitle>数据库</CardTitle>
+          <CardDescription>此服务器上的所有 MySQL 数据库</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="rounded-md border">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Username</TableHead>
-                  <TableHead>Host</TableHead>
-                  <TableHead>Port</TableHead>
-                  <TableHead>Created</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>名称</TableHead>
+                  <TableHead>用户名</TableHead>
+                  <TableHead>主机</TableHead>
+                  <TableHead>端口</TableHead>
+                  <TableHead>创建时间</TableHead>
+                  <TableHead className="text-right">操作</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -104,7 +104,7 @@ export default function Databases() {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                      No databases found. Click "Create Database" to add one.
+                      未找到数据库。点击“创建数据库”添加一个。
                     </TableCell>
                   </TableRow>
                 )}
@@ -117,26 +117,26 @@ export default function Databases() {
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Create New Database</DialogTitle>
-            <DialogDescription>Set up a new MySQL database</DialogDescription>
+            <DialogTitle>创建新数据库</DialogTitle>
+            <DialogDescription>设置新的 MySQL 数据库</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="dbname">Database Name</Label>
+              <Label htmlFor="dbname">数据库名称</Label>
               <Input id="dbname" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="mydb" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="username">用户名</Label>
               <Input id="username" value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} placeholder="dbuser" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">密码</Label>
               <Input id="password" type="password" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} placeholder="••••••••" />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCreateDialog(false)}>Cancel</Button>
-            <Button onClick={handleCreate}>Create</Button>
+            <Button variant="outline" onClick={() => setShowCreateDialog(false)}>取消</Button>
+            <Button onClick={handleCreate}>创建</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

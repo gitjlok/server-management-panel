@@ -16,14 +16,14 @@ import Users from "./pages/Users";
 import { Activity, Files, Globe, Database, Cpu, Shield, FileText, Users as UsersIcon } from "lucide-react";
 
 const navigation = [
-  { name: "Dashboard", href: "/", icon: Activity },
-  { name: "File Manager", href: "/files", icon: Files },
-  { name: "Websites", href: "/websites", icon: Globe },
-  { name: "Databases", href: "/databases", icon: Database },
-  { name: "Processes", href: "/processes", icon: Cpu },
-  { name: "Security", href: "/security", icon: Shield },
-  { name: "Logs", href: "/logs", icon: FileText },
-  { name: "Users", href: "/users", icon: UsersIcon },
+  { name: "仪表板", href: "/", icon: Activity },
+  { name: "文件管理", href: "/files", icon: Files },
+  { name: "网站管理", href: "/websites", icon: Globe },
+  { name: "数据库", href: "/databases", icon: Database },
+  { name: "进程管理", href: "/processes", icon: Cpu },
+  { name: "安全设置", href: "/security", icon: Shield },
+  { name: "操作日志", href: "/logs", icon: FileText },
+  { name: "用户管理", href: "/users", icon: UsersIcon },
 ];
 
 function Router() {

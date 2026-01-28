@@ -10,17 +10,17 @@ export default function Users() {
   return (
     <div className="space-y-6 animate-fadeIn">
       <div>
-        <h1 className="text-3xl font-bold">User Management</h1>
-        <p className="text-muted-foreground mt-1">Manage system users and permissions</p>
+        <h1 className="text-3xl font-bold">用户管理</h1>
+        <p className="text-muted-foreground mt-1">管理系统用户和权限</p>
       </div>
 
       <Card className="shadow-elegant">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <UsersIcon className="w-5 h-5" />
-            System Users
+            系统用户
           </CardTitle>
-          <CardDescription>All users with access to this panel</CardDescription>
+          <CardDescription>所有可访问此面板的用户</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="rounded-md border">
@@ -28,19 +28,19 @@ export default function Users() {
               <TableHeader>
                 <TableRow>
                   <TableHead>ID</TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead>Login Method</TableHead>
-                  <TableHead>Last Sign In</TableHead>
-                  <TableHead>Created</TableHead>
+                  <TableHead>姓名</TableHead>
+                  <TableHead>邮箱</TableHead>
+                  <TableHead>角色</TableHead>
+                  <TableHead>登录方式</TableHead>
+                  <TableHead>最后登录</TableHead>
+                  <TableHead>创建时间</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {isLoading ? (
                   <TableRow>
                     <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                      Loading users...
+                      正在加载用户...
                     </TableCell>
                   </TableRow>
                 ) : users && users.length > 0 ? (
@@ -76,7 +76,7 @@ export default function Users() {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                      No users found
+                      未找到用户
                     </TableCell>
                   </TableRow>
                 )}

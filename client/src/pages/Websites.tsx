@@ -97,32 +97,32 @@ export default function Websites() {
     <div className="space-y-6 animate-fadeIn">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Website Management</h1>
-          <p className="text-muted-foreground mt-1">Manage hosted websites and domains</p>
+          <h1 className="text-3xl font-bold">网站管理</h1>
+          <p className="text-muted-foreground mt-1">管理托管的网站和域名</p>
         </div>
         <Button onClick={() => setShowCreateDialog(true)}>
           <Plus className="w-4 h-4 mr-2" />
-          Add Website
+          添加网站
         </Button>
       </div>
 
       <Card className="shadow-elegant">
         <CardHeader>
-          <CardTitle>Websites</CardTitle>
-          <CardDescription>All managed websites on this server</CardDescription>
+          <CardTitle>网站</CardTitle>
+          <CardDescription>此服务器上的所有管理网站</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="rounded-md border custom-scrollbar overflow-auto">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Domain</TableHead>
-                  <TableHead>Path</TableHead>
-                  <TableHead>Port</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>名称</TableHead>
+                  <TableHead>域名</TableHead>
+                  <TableHead>路径</TableHead>
+                  <TableHead>端口</TableHead>
+                  <TableHead>状态</TableHead>
                   <TableHead>SSL</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="text-right">操作</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -201,7 +201,7 @@ export default function Websites() {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
-                      No websites configured. Click "Add Website" to create one.
+                      未配置网站。点击“添加网站”创建一个。
                     </TableCell>
                   </TableRow>
                 )}
@@ -214,14 +214,14 @@ export default function Websites() {
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add New Website</DialogTitle>
+            <DialogTitle>添加新网站</DialogTitle>
             <DialogDescription>
-              Configure a new website on this server
+              在此服务器上配置新网站
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Website Name *</Label>
+              <Label htmlFor="name">网站名称 *</Label>
               <Input
                 id="name"
                 value={formData.name}
@@ -230,7 +230,7 @@ export default function Websites() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="domain">Domain *</Label>
+              <Label htmlFor="domain">域名 *</Label>
               <Input
                 id="domain"
                 value={formData.domain}
@@ -239,7 +239,7 @@ export default function Websites() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="path">Path *</Label>
+              <Label htmlFor="path">路径 *</Label>
               <Input
                 id="path"
                 value={formData.path}
@@ -248,7 +248,7 @@ export default function Websites() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="port">Port (optional)</Label>
+              <Label htmlFor="port">端口 (可选)</Label>
               <Input
                 id="port"
                 type="number"
@@ -260,9 +260,9 @@ export default function Websites() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
-              Cancel
+              取消
             </Button>
-            <Button onClick={handleCreate}>Create Website</Button>
+            <Button onClick={handleCreate}>创建网站</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

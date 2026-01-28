@@ -89,24 +89,24 @@ export default function FileManager() {
     <div className="space-y-6 animate-fadeIn">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">File Manager</h1>
-          <p className="text-muted-foreground mt-1">Browse and manage server files</p>
+          <h1 className="text-3xl font-bold">文件管理器</h1>
+          <p className="text-muted-foreground mt-1">浏览和管理服务器文件</p>
         </div>
         <div className="flex gap-2">
           <Button onClick={() => setShowNewFolderDialog(true)} variant="outline" size="sm">
             <FolderPlus className="w-4 h-4 mr-2" />
-            New Folder
+            新建文件夹
           </Button>
           <Button onClick={() => refetch()} variant="outline" size="sm">
             <RefreshCw className="w-4 h-4 mr-2" />
-            Refresh
+            刷新
           </Button>
         </div>
       </div>
 
       <Card className="shadow-elegant">
         <CardHeader>
-          <CardTitle>Current Directory</CardTitle>
+          <CardTitle>当前目录</CardTitle>
           <CardDescription>
             <div className="flex items-center gap-1 mt-2 flex-wrap">
               <Button
@@ -141,7 +141,7 @@ export default function FileManager() {
               className="mb-4 w-full justify-start"
             >
               <Folder className="w-4 h-4 mr-2" />
-              .. (Parent Directory)
+              .. (上级目录)
             </Button>
           )}
 
@@ -149,12 +149,12 @@ export default function FileManager() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Size</TableHead>
-                  <TableHead>Permissions</TableHead>
-                  <TableHead>Modified</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>名称</TableHead>
+                  <TableHead>类型</TableHead>
+                  <TableHead>大小</TableHead>
+                  <TableHead>权限</TableHead>
+                  <TableHead>修改时间</TableHead>
+                  <TableHead className="text-right">操作</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -183,7 +183,7 @@ export default function FileManager() {
                       </TableCell>
                       <TableCell>
                         <Badge variant={file.isDirectory ? "default" : "secondary"}>
-                          {file.isDirectory ? "Directory" : "File"}
+                          {file.isDirectory ? "目录" : "文件"}
                         </Badge>
                       </TableCell>
                       <TableCell>{file.isDirectory ? "-" : formatBytes(file.size)}</TableCell>
@@ -213,7 +213,7 @@ export default function FileManager() {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
-                      This directory is empty
+                      此目录为空
                     </TableCell>
                   </TableRow>
                 )}
@@ -226,14 +226,14 @@ export default function FileManager() {
       <Dialog open={showNewFolderDialog} onOpenChange={setShowNewFolderDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Create New Folder</DialogTitle>
+            <DialogTitle>创建新文件夹</DialogTitle>
             <DialogDescription>
-              Enter a name for the new folder in {currentPath}
+              在 {currentPath} 中输入新文件夹的名称
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="folderName">Folder Name</Label>
+              <Label htmlFor="folderName">文件夹名称</Label>
               <Input
                 id="folderName"
                 value={newFolderName}
@@ -245,9 +245,9 @@ export default function FileManager() {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowNewFolderDialog(false)}>
-              Cancel
+              取消
             </Button>
-            <Button onClick={handleCreateFolder}>Create</Button>
+            <Button onClick={handleCreateFolder}>创建</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

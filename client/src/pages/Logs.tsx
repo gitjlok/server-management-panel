@@ -14,12 +14,12 @@ export default function Logs() {
     <div className="space-y-6 animate-fadeIn">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Operation Logs</h1>
-          <p className="text-muted-foreground mt-1">View system activity and audit trail</p>
+          <h1 className="text-3xl font-bold">操作日志</h1>
+          <p className="text-muted-foreground mt-1">查看系统活动和审计跟踪</p>
         </div>
         <Button onClick={() => refetch()} variant="outline" size="sm">
           <RefreshCw className="w-4 h-4 mr-2" />
-          Refresh
+          刷新
         </Button>
       </div>
 
@@ -27,23 +27,23 @@ export default function Logs() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <FileText className="w-5 h-5" />
-            Recent Activity
+            最近活动
           </CardTitle>
-          <CardDescription>Last 100 operations performed on the server</CardDescription>
+          <CardDescription>服务器上执行的最后 100 次操作</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="rounded-md border custom-scrollbar overflow-auto max-h-[600px]">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Timestamp</TableHead>
-                  <TableHead>User ID</TableHead>
-                  <TableHead>Action</TableHead>
-                  <TableHead>Resource</TableHead>
-                  <TableHead>Resource ID</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>IP Address</TableHead>
-                  <TableHead>Details</TableHead>
+                  <TableHead>时间戳</TableHead>
+                  <TableHead>用户ID</TableHead>
+                  <TableHead>操作</TableHead>
+                  <TableHead>资源</TableHead>
+                  <TableHead>资源ID</TableHead>
+                  <TableHead>状态</TableHead>
+                  <TableHead>IP地址</TableHead>
+                  <TableHead>详情</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -81,7 +81,7 @@ export default function Logs() {
                 ) : (
                   <TableRow>
                     <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
-                      No logs available
+                      没有可用的日志
                     </TableCell>
                   </TableRow>
                 )}
