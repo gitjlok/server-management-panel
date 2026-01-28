@@ -146,8 +146,14 @@ install_panel() {
     mkdir -p $INSTALL_DIR
     cd $INSTALL_DIR
     
-    # 这里应该从您的仓库下载代码
-    # git clone https://github.com/your-repo/server-panel.git .
+    # 从 GitHub 克隆代码
+    print_info "正在从 GitHub 克隆项目代码..."
+    git clone https://github.com/gitjlok/server-management-panel.git .
+    
+    if [ $? -ne 0 ]; then
+        print_error "代码克隆失败，请检查网络连接"
+        exit 1
+    fi
     
     print_info "正在安装依赖包..."
     npm install -g pnpm
